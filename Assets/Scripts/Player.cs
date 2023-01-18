@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-  [SerializeField] float thrustSpeed = 1f;
-  [SerializeField] float turnSpeed = 1f;
+  public float thrustSpeed = 1f;
+  public float turnSpeed = 1f;
+
+  public Bullet bulletPrefab;
 
   private bool thrusting;
   private float turnDirection;
@@ -29,6 +32,10 @@ public class Player : MonoBehaviour
       turnDirection = 0f;
     }
 
+    if(Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) {
+      shoot();
+    }
+
   }
 
   private void FixedUpdate() {
@@ -41,5 +48,10 @@ public class Player : MonoBehaviour
       rigidbody.AddTorque(turnDirection * turnSpeed);
     }
 
+  }
+
+  private void shoot() {
+    Bullet bullet = Instantiate(this.bulletPrefab, this.transform.position, this.transform.rotation);
+    bullet.project(this.transform.up);
   }
 }
